@@ -2,9 +2,11 @@ package com.vaadin.tutorial.crm.ui;
 
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -50,10 +52,15 @@ public class MainLayout extends AppLayout {
         RouterLink listLink = new RouterLink("List", ListView.class);
         listLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        addToDrawer(new VerticalLayout(
-            listLink,
-            new RouterLink("Dashboard", DashboardView.class)
-        ));
+        Button tutorialButton = new Button("Read tutorial", VaadinIcon.EXTERNAL_LINK.create());
+        VerticalLayout navigation = new VerticalLayout(
+                listLink,
+                new RouterLink("Dashboard", DashboardView.class),
+                tutorialButton
+        );
+        navigation.setHeight("100%");
+        navigation.expand(tutorialButton);
+        addToDrawer(navigation);
     }
 
 

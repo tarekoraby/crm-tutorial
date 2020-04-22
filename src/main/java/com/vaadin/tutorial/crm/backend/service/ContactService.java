@@ -4,6 +4,7 @@ import com.vaadin.tutorial.crm.backend.entity.Company;
 import com.vaadin.tutorial.crm.backend.entity.Contact;
 import com.vaadin.tutorial.crm.backend.repository.CompanyRepository;
 import com.vaadin.tutorial.crm.backend.repository.ContactRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -31,10 +32,10 @@ public class ContactService {
     }
 
     public List<Contact> findAll(String filterText) {
-        if(filterText == null || filterText.isEmpty()) {
+        if (filterText == null || filterText.isEmpty()) {
             return contactRepository.findAll();
-        } else  {
-            return  contactRepository.search(filterText);
+        } else {
+            return contactRepository.search(filterText);
         }
     }
 
@@ -49,43 +50,45 @@ public class ContactService {
     public void save(Contact contact) {
         if (contact == null) {
             LOGGER.log(Level.SEVERE,
-                "Contact is null. Are you sure you have connected your form to the application?");
+                    "Contact is null. Are you sure you have connected your form to the application?");
             return;
         }
         contactRepository.save(contact);
     }
 
     @PostConstruct
+    @Scheduled(fixedRate = 60 * 1000) //once a day
     public void populateTestData() {
-        if (companyRepository.count() == 0) {
-            companyRepository.saveAll(
-                Stream.of("Path-Way Electronics", "E-Tech Management", "Path-E-Tech Management")
-                    .map(Company::new)
-                    .collect(Collectors.toList()));
-        }
+        System.out.println("Updated database");
+        contactRepository.deleteAll();
+        companyRepository.deleteAll();
 
-        if (contactRepository.count() == 0) {
-            Random r = new Random(0);
-            List<Company> companies = companyRepository.findAll();
-            contactRepository.saveAll(
+        companyRepository.saveAll(
+                Stream.of("Path-Way Electronics", "E-Tech Management", "Path-E-Tech Management")
+                        .map(Company::new)
+                        .collect(Collectors.toList()));
+
+        Random r = new Random(0);
+        List<Company> companies = companyRepository.findAll();
+        contactRepository.saveAll(
                 Stream.of("Gabrielle Patel", "Brian Robinson", "Eduardo Haugen",
-                    "Koen Johansen", "Alejandro Macdonald", "Angel Karlsson", "Yahir Gustavsson", "Haiden Svensson",
-                    "Emily Stewart", "Corinne Davis", "Ryann Davis", "Yurem Jackson", "Kelly Gustavsson",
-                    "Eileen Walker", "Katelyn Martin", "Israel Carlsson", "Quinn Hansson", "Makena Smith",
-                    "Danielle Watson", "Leland Harris", "Gunner Karlsen", "Jamar Olsson", "Lara Martin",
-                    "Ann Andersson", "Remington Andersson", "Rene Carlsson", "Elvis Olsen", "Solomon Olsen",
-                    "Jaydan Jackson", "Bernard Nilsen")
-                    .map(name -> {
-                        String[] split = name.split(" ");
-                        Contact contact = new Contact();
-                        contact.setFirstName(split[0]);
-                        contact.setLastName(split[1]);
-                        contact.setCompany(companies.get(r.nextInt(companies.size())));
-                        contact.setStatus(Contact.Status.values()[r.nextInt(Contact.Status.values().length)]);
-                        String email = (contact.getFirstName() + "." + contact.getLastName() + "@" + contact.getCompany().getName().replaceAll("[\\s-]", "") + ".com").toLowerCase();
-                        contact.setEmail(email);
-                        return contact;
-                    }).collect(Collectors.toList()));
-        }
+                        "Koen Johansen", "Alejandro Macdonald", "Angel Karlsson", "Yahir Gustavsson", "Haiden Svensson",
+                        "Emily Stewart", "Corinne Davis", "Ryann Davis", "Yurem Jackson", "Kelly Gustavsson",
+                        "Eileen Walker", "Katelyn Martin", "Israel Carlsson", "Quinn Hansson", "Makena Smith",
+                        "Danielle Watson", "Leland Harris", "Gunner Karlsen", "Jamar Olsson", "Lara Martin",
+                        "Ann Andersson", "Remington Andersson", "Rene Carlsson", "Elvis Olsen", "Solomon Olsen",
+                        "Jaydan Jackson", "Bernard Nilsen")
+                        .map(name -> {
+                            String[] split = name.split(" ");
+                            Contact contact = new Contact();
+                            contact.setFirstName(split[0]);
+                            contact.setLastName(split[1]);
+                            contact.setCompany(companies.get(r.nextInt(companies.size())));
+                            contact.setStatus(Contact.Status.values()[r.nextInt(Contact.Status.values().length)]);
+                            String email = (contact.getFirstName() + "." + contact.getLastName() + "@" + contact.getCompany().getName().replaceAll("[\\s-]", "") + ".com").toLowerCase();
+                            contact.setEmail(email);
+                            return contact;
+                        }).collect(Collectors.toList()));
+
     }
 }
