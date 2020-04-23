@@ -16,4 +16,3 @@ RUN useradd -m myuser
 USER myuser
 EXPOSE 5000
 CMD java -jar -Dspring.profiles.active=prod /usr/app/app.jar
-----
