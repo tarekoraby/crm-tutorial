@@ -57,7 +57,7 @@ public class ContactService {
     }
 
     @PostConstruct
-    @Scheduled(fixedRate = 60 * 1000) //once a day
+    @Scheduled(fixedRate = 4 * 60 * 60 * 1000) //every 4h
     public void populateTestData() {
         System.out.println("Updated database");
         contactRepository.deleteAll();

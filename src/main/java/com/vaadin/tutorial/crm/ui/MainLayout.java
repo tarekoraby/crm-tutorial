@@ -1,8 +1,8 @@
 package com.vaadin.tutorial.crm.ui;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
@@ -52,14 +52,16 @@ public class MainLayout extends AppLayout {
         RouterLink listLink = new RouterLink("List", ListView.class);
         listLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-        Button tutorialButton = new Button("Read tutorial", VaadinIcon.EXTERNAL_LINK.create());
+        Anchor tutorialButton = new Anchor("https://vaadin.com/learn/tutorials/modern-web-apps-with-spring-boot-and-vaadin", new Text("Read tutorial"),  VaadinIcon.EXTERNAL_LINK.create());
+        tutorialButton.setTarget("_blank");
+        tutorialButton.addClassName("button");
+
         VerticalLayout navigation = new VerticalLayout(
                 listLink,
                 new RouterLink("Dashboard", DashboardView.class),
                 tutorialButton
         );
         navigation.setHeight("100%");
-        navigation.expand(tutorialButton);
         addToDrawer(navigation);
     }
 
