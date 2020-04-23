@@ -12,7 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.HighlightConditions;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.server.*;
 import com.vaadin.tutorial.crm.ui.views.dashboard.DashboardView;
 import com.vaadin.tutorial.crm.ui.views.list.ListView;
 
@@ -26,7 +26,7 @@ import com.vaadin.tutorial.crm.ui.views.list.ListView;
     enableInstallPrompt = false
 )
 @CssImport("./styles/shared-styles.css")
-public class MainLayout extends AppLayout {
+public class MainLayout extends AppLayout implements PageConfigurator {
 
     public MainLayout() {
         createHeader();
@@ -66,4 +66,12 @@ public class MainLayout extends AppLayout {
     }
 
 
+    @Override
+    public void configurePage(InitialPageSettings settings) {
+        settings.addMetaTag("og:title", "Vaadin CRM - Full stack Spring Boot and Vaadin app");
+        settings.addMetaTag("og:description", "Installable progressive web app with a database and Spring Security Login.");
+        settings.addMetaTag("og:url", "https://crm.demo.vaadin.com/");
+        settings.addMetaTag("og:image", "https://crm.demo.vaadin.com/images/spring-boot-vaadin-tutorial.png");
+        settings.addMetaTag("og:type", "website");
+    }
 }

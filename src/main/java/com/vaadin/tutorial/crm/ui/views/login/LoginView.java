@@ -8,12 +8,14 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.InitialPageSettings;
+import com.vaadin.flow.server.PageConfigurator;
 
 import java.util.Collections;
 
 @Route("login")
 @PageTitle("Login | Vaadin CRM")
-public class LoginView extends VerticalLayout implements BeforeEnterObserver {
+public class LoginView extends VerticalLayout implements BeforeEnterObserver, PageConfigurator {
 
     LoginForm login = new LoginForm();
 
@@ -47,5 +49,14 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
                 .isEmpty()) {
             login.setError(true);
         }
+    }
+
+    @Override
+    public void configurePage(InitialPageSettings settings) {
+        settings.addMetaTag("og:title", "Vaadin CRM - Full stack Spring Boot and Vaadin app");
+        settings.addMetaTag("og:description", "Installable progressive web app with a database and Spring Security Login.");
+        settings.addMetaTag("og:url", "https://crm.demo.vaadin.com/");
+        settings.addMetaTag("og:image", "https://crm.demo.vaadin.com/images/spring-boot-vaadin-tutorial.png");
+        settings.addMetaTag("og:type", "website");
     }
 }
